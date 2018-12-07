@@ -1,206 +1,132 @@
-[![General Assembly Logo](https://camo.githubusercontent.com/1a91b05b8f4d44b5bbfb83abac2b0996d8e26c92/687474703a2f2f692e696d6775722e636f6d2f6b6538555354712e706e67)](https://generalassemb.ly/education/web-development-immersive)
+# PixelKnights
 
-# express-api-template
+# Required Documentation
+### Links
+| Item | Link |
+|:----:|:----:|
+| Client Repository  | https://github.com/ckempema/PixelKnight  |
+| Client Deployed   | https://ckempema.github.io/PixelKnight/  |
+| Back End Repository   |  https://github.com/ckempema/PixelKnight-api |
+| Back End Deployed   | https://afternoon-earth-99855.herokuapp.com |
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+### What is this?
+  For my final project I made yet another game. This game uses a procedurally generated maze that the can player can solve, dodging enemies and grabbing points along the way. The points are loaded into a comparativly simple back end, and can be retrieved to show a sorted highscores list of the top 100 attempts.
 
-## Installation
+### Technologies Used
+  ##### Front End
+    - HTML/SCSS
+    - JavaScript
+    - Node.js
+    - JQuery
 
-1.  [Download](../../archive/master.zip) this template.
-1.  Move the .zip file to your `wdi/projects/` directory and Unzip it (creating a folder) -- **NOTE:** if the folder was already unzipped, use the `mv` command line to move it to the `wdi/projects/` directory.
-1.  Rename the directory from express-api-template -> your-app-name.
-1.  Empty [`README.md`](README.md) and fill with your own content.
-1.  Move into the new project and `git init`.
-1.  Replace all instances of `'express-api-template'` with your app name.
-1.  Install dependencies with `npm install`.
-1.  Ensure that you have `nodemon` installed by running `npm install -g nodemon`.
-1.  From the root of your repository, run the following commands. They will set a SECRET_KEY for development and testing.
- ```sh
- echo SECRET_KEY_BASE_TEST=$(openssl rand -base64 66 | tr -d '\n') >> .env
- echo SECRET_KEY_BASE_DEVELOPMENT=$(openssl rand -base64 66 | tr -d '\n') >> .env
- ```
-1.  Ensure the API is functioning properly by running `npm run server`.
-1.  Once everything is working, make an initial commit.
-1.  Follow the steps in [express-api-deployment-guide](https://git.generalassemb.ly/ga-wdi-boston/express-api-deployment-guide)
+  ##### Back End
+    - Express
+    - MongoDB
 
-## Structure
+  ##### Algorithms
+    - Insertion Sort
+    - Prims Algorithm (Modified)
+    - Dijkstras Algorithm
 
-Dependencies are stored in [`package.json`](package.json).
+### Unsolved Problems
+  There are a number of things in the game that could be modified. The weights of the game could be modified endlessly to try and perfect the randomization and the gameplay mechanics. Artistically there is alot to improve, and further gameplay mechanics could be added.
 
-The most important file for understanding the structure of the template is
-`server.js`. This is where the actual Express `app` object is created, where
-the middlewares and routes are registered, and more. To register a routefile,
-follow the pattern established here with `exampleRoutes` and `userRoutes`. If
-you want to add any middlewares to your app, do that here.
+  Here is a list of features to improve `(they're definitely not errors that fail requirements)`
+  - Fire spawn block does not turn red
+  - Performance improvements
+  - Gamepiece location generations more random
+  - More user testing
+  - Improve code readability
 
-The `app` directory contains models and route files. Models are simply Mongoose
-models. To create your own, follow the patterns established in
-`app/models/example.js`. Route files are somewhat similar to controllers in
-Rails, but they cover more functionality, including serialization and deciding
-which HTTP verbs to accept and what to do with them.
+  Because of the complexity of the application, there was never enough time or test subjects to really test every possible game board generation. There are a number of unmodeled interactions that could affect the game that I dont know about, so there very well might be more things to fix later on.
 
-The `config` directory holds just `db.js`, which is where you specify the name
-and URL of your database.
+### Planning/Problem Solving
+  I started with a very good plan `(see below)`, and then feature creep got in the way. Oftentimes implementing one thing would break everything else and then I would have to go element by element and fix each interaction. This resulted in some redundant code, and a somewhat unreadable codebase because not all handlers are located in the same place. I was able to get everything working, but with more time I can resolve this into a much cleaner looking codebase.
 
-The `lib` directory is for code that will be used in other places in the
-application. The token authentication code is stored in `lib/auth.js`. The
-other files in `lib` deal with error handling. `custom_errors.js` is where all
-the different custom classes of errors are created. If you need some other kind
-of error message, you can add it here. There are also some functions defined
-here that are used elsewhere to check for errors. `lib/error_handler.js` is a
-function that will be used in all your `.catch`es. It catches errors, and sets
-the response status code based on what type of error got thrown.
+### Front End Documentation Requirements
+#### Embedded Image
+![Embedded Image](./public/capstone-screenshot.png)
+#### Use instructions
+The crud interactions all happen behind the scenes on the front end. Once a player clicks new game they can play with the arrow keys, using space to stop. Once all their lives are expended their score will be logged to the api, and they can view it if it is in the top 100. Users can delete their own scores (if not playing as guest) if they so desire.
 
-You probably will only need to interact with files in `app/models`,
-`app/routes`, and `server.js`. You'll need to edit `db/config.js` just once,
-to change the name of your app.
+### Back End Documentation Requirements
 
-## Tasks
+#### User Routes
+| Request Type | Path | Data | Function |
+|:-:|:-:|:-:|:-:|
+| POST | /sign-in  | data: credentials  | Sign In  |
+| PATCH  | /change-password | passwords {old: '', new: ''}  | Change Password  |
+| DELETE  | /sign-out  | Header: Authorization  | Sign Out  |
 
-Instead of `grunt`, this template uses `npm` as a task runner. This is more
-conventional for modern Express apps, and it's handy because we'll definitely
-use `npm` anyway. These are the commands available:
+#### Score Routes
+| Request Type | Path | Data | Function |
+|:-:|:-:|:-:|:-:|
+| POST  | /scores  | token, score | Submit Score |
+| GET   | /scores  | token | Get all scores  |
+| GET   | /scores/{:id} | token  | Get individual score |
+| PATCH | /scores  | token, score  | update (not used in front end) |
+| DELETE | /scores | token, id | Delete Entry |
 
-| Command                | Effect                                                                                                      |
-|------------------------|-------------------------------------------------------------------------------------------------------------|
-| `npm run server`       | Starts a development server with `nodemon` that automatically refreshes when you change something.                                                                                         |
-| `npm test`             | Runs automated tests.                                                                                       |
-| `npm run debug-server` | Starts the server in debug mode, which will print lots of extra info about what's happening inside the app. |
+#### Usage
+The Back end is deployed to heroku, so calls can be made. It is just a data store, all logic for implenting sorting and top scores is implemented in the front end. This should be fixed later, but was not possible in the time avalible.
 
-## API
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+# Planning Documentation:
+## Wireframe
+![Wireframe](./public/PixelKnights_Wireframe_V1.png)
 
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API.
+## User Stories
+  #### Authentication
+    - Sign up
+    - Sign in
+    - Sign out
+    - Change Password
 
-### Authentication
+  #### Back End
+    - Store top 5-10 global highscores
+    - Store top 5-10 user highscores
 
-| Verb   | URI Pattern            | Controller#Action |
-|--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/` | `users#changepw`  |
-| DELETE | `/sign-out/`        | `users#signout`   |
+  #### Gameplay Ideas
+    - Generate a dynamic map for each level using an adaptation of prims algorithm
+    - Generate random start and stop points for all other game items
+    - Once user has reached the level finish location advnace the level and regen on a new map
+    - Create an enemy with a bad algorithm for hunting user
+    - Add more enemies once the level gets high enough (>3?)
+    - Track a score based on the number of gold pieces collected in conjunction with number of completed levels
+    - Remove lives when player is caught by hunter, reset game when lives is < 0, Randomly allocate bonus lives on a ~1/20 probablility distribution
 
-#### POST /sign-up
+  #### Front End
+    - Give user the option to view high scores
+## Plan to MVP
 
-Request:
+  #### Stage 1: Implement basic Gameplay
+    - Front end with user authentication
+    - Back end that tracks user highscores
+    - Dynamically generate a maze using prims algorithm
+      + Ensure that maze will always have a solution
+    - Allow user to move around the maze
+    - Display a message when the maze has been solved
 
-```sh
-curl --include --request POST http://localhost:4741/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
+  #### Stage 2: Advanced Game Logic
+    - Once maze is complete autogenerate a new maze
+    - Create a fairly dumb hunter bot that tries to reach the User
+    - Generate a score based on level reached before first death
+    - Save score into backend
 
-```sh
-scripts/sign-up.sh
-```
+  #### Stage 3: Final cleanup for V1
+    - Allow user to retrieve personal highscores
+    - Display highscores
+    - Ensure the game can be played
+    - Clean up UI and test for bugs
 
-Response:
 
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
+  ### More Ideas once mvp is completed
+    - Add in random `gold` pieces that boost the score
+    - Add in lives to get the user further into the game
+    - Add in multiple hunters as level progresses
+    - Add in play/pause buttons once game has begun
+    - Add in a timer element that affects score
+    - Create a guest login
 
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
-
-#### POST /sign-in
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:4741/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
-
-```sh
-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:4741/change-password/ \
-  --header "Authorization: Token token=$TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:4741/sign-out/ \
-  --header "Authorization: Token token=$TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-## [License](LICENSE)
-
-1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
-1.  All software code is licensed under GNU GPLv3. For commercial use or
-    alternative licensing, please contact legal@ga.co.
+## Back End ERD
+![ERD](./public/capstone-erd-v1.png)
